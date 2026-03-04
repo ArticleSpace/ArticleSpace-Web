@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArticleSpace</title>
+    <style>
+        /* Define our core colors */
+        :root {
+            --primary-blue: #00a8ff; /* Bright sky blue accent */
+            --bg-color: #f4f7f6; /* Soft light gray for the background */
+            --text-main: #333333; /* Dark gray for high readability */
+            --header-bg: #ffffff; /* Pure white header */
+        }
+
+        /* General page styling */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Header styling */
+        header {
+            background-color: var(--header-bg);
+            padding: 15px 40px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08); /* Soft shadow to separate from body */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky; /* Keeps the header at the top when scrolling */
+            top: 0;
+            z-index: 1000;
+        }
+
+        /* Logo styling */
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+        .logo-article { color: var(--primary-blue); }
+        .logo-space { color: #000000; }
+
+        /* Search bar styling */
+        .search-container {
+            position: relative;
+        }
+        #searchBar {
+            padding: 12px 20px;
+            font-size: 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 30px; /* Gives it a modern pill shape */
+            width: 350px;
+            transition: all 0.3s ease;
+        }
+        #searchBar:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 8px rgba(0, 168, 255, 0.2);
+        }
+
+        /* Main content area */
+        main {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        h2 {
+            color: #000000;
+            margin-bottom: 25px;
+            font-size: 24px;
+        }
+
+        /* Article list and card styling */
+        #articleList {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .article-card {
+            background-color: #ffffff;
+            padding: 20px 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+            border-left: 5px solid var(--primary-blue); /* The bright sky blue accent */
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .article-card:hover {
+            transform: translateY(-3px); /* Lifts the card up slightly when hovered */
+            box-shadow: 0 8px 15px rgba(0, 168, 255, 0.15); /* Blue tinted shadow on hover */
+        }
+        .article-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin: 0 0 8px 0;
+            color: #000000;
+        }
+        .article-summary {
+            margin: 0;
+            color: #666666;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        /* Message for when search yields no results */
+        .no-results {
+            text-align: center;
+            color: #888888;
+            font-style: italic;
+            display: none;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="#" class="logo">
+            <span class="logo-article">Article</span><span class="logo-space">Space</span>
+        </a>
+        <div class="search-container">
+            <input type="text" id="searchBar" placeholder="Search for an article...">
+        </div>
+    </header>
+
+    <main>
+        <h2>Explore Knowledge</h2>
+        <div id="articleList">
+            </div>
+        <p id="noResults" class="no-results">No articles found matching your search.</p>
+    </main>
+
+    <script>
+        // 1. This is your "database". Add your new articles to this list!
+        const articles = [
+            { 
+                title: "How to Build a Website", 
+                summary: "Learn the fundamentals of HTML, CSS, and JavaScript to create your first page.", 
+                link: "build-website.html" 
+            },
+            { 
+                title: "The History of Open Source", 
+                summary: "Discover how collaborative coding changed the world of software development.", 
+                link: "open-source.html" 
+            },
+            { 
+                title: "Understanding Physics Engines", 
+                summary: "A deep dive into how video games simulate real-world gravity and collisions.", 
+                link: "physics-engines.html" 
+            },
+            { 
+                title: "Basics of Astronomy", 
+                summary: "An introductory guide to identifying constellations and understanding our solar system.", 
+                link: "astronomy.html" 
+            }
+        ];
+
+        // 2. Grab the HTML elements we need to interact with
+        const articleListContainer = document.getElementById('articleList');
+        const searchBar = document.getElementById('searchBar');
+        const noResultsMessage = document.getElementById('noResults');
+
+        // 3. Function to build the clickable cards on the screen
+        function displayArticles(articlesToDisplay) {
+            articleListContainer.innerHTML = ''; // Clear the current list
+            
+            if (articlesToDisplay.length === 0) {
+                noResultsMessage.style.display = 'block'; // Show "Not found" message
+            } else {
+                noResultsMessage.style.display = 'none'; // Hide "Not found" message
+                
+                // Loop through the articles and create a clickable card for each
+                articlesToDisplay.forEach(article => {
+                    const articleEl = document.createElement('a');
+                    articleEl.href = article.link;
+                    articleEl.className = 'article-card';
+                    articleEl.innerHTML = `
+                        <h3 class="article-title">${article.title}</h3>
+                        <p class="article-summary">${article.summary}</p>
+                    `;
+                    articleListContainer.appendChild(articleEl);
+                });
+            }
+        }
+
+        // 4. Show all articles when the page first loads
+        displayArticles(articles);
+
+        // 5. Make the search bar work in real-time
+        searchBar.addEventListener('input', (e) => {
+            const searchString = e.target.value.toLowerCase();
+            
+            // Filter the articles array based on what the user typed
+            const filteredArticles = articles.filter(article => {
+                return article.title.toLowerCase().includes(searchString) || 
+                       article.summary.toLowerCase().includes(searchString);
+            });
+            
+            // Update the screen with the filtered results
+            displayArticles(filteredArticles);
+        });
+    </script>
+</body>
+</html>
