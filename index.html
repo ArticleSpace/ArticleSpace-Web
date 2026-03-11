@@ -132,6 +132,31 @@
             margin: 0;
             letter-spacing: 0.5px;
         }
+        /* Mobile Responsiveness */
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column; /* Stacks the logo and search bar vertically */
+                gap: 15px; /* Adds space between them */
+                padding: 15px 20px; /* Reduces the side padding to save space */
+            }
+
+            .search-container {
+                width: 100%; /* Makes the container take up the full screen width */
+            }
+
+            #searchBar {
+                width: 100%; /* Makes the search input stretch to fit the screen */
+                box-sizing: border-box; /* Keeps padding inside the width */
+            }
+
+            .banner {
+                padding: 30px 15px; /* Shrinks the banner padding slightly */
+            }
+
+            .banner-quote {
+                font-size: 20px; /* Slightly reduces the quote size for smaller screens */
+            }
+        }
     </style>
 </head>
 <body>
