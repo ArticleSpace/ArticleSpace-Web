@@ -13,6 +13,35 @@
             --header-bg: #ffffff; /* Pure white header */
         }
 
+        /* Dark Theme Overrides */
+        body.dark-theme {
+            --bg-color: #121212; /* Deep dark gray background */
+            --text-main: #e0e0e0; /* Light gray text for readability */
+            --header-bg: #1e1e1e; /* Slightly lighter gray for the header */
+        }
+
+        /* Update specific elements that had hardcoded black/white colors */
+        body.dark-theme h2,
+        body.dark-theme .logo-space,
+        body.dark-theme .article-title {
+            color: #ffffff; 
+        }
+
+        body.dark-theme .article-card {
+            background-color: #1e1e1e;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5); /* Darker shadow */
+        }
+
+        body.dark-theme .article-summary {
+            color: #aaaaaa;
+        }
+
+        body.dark-theme #searchBar {
+            background-color: #121212;
+            color: #ffffff;
+            border-color: #333333;
+        }
+
         /* General page styling */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -168,6 +197,9 @@
         <div class="search-container">
             <input type="text" id="searchBar" placeholder="Search for an article...">
         </div>
+        <button id="themeToggle" style="padding: 10px 15px; cursor: pointer; border-radius: 20px; border: none; background-color: var(--primary-blue); color: white; font-weight: 600; transition: background-color 0.3s;">
+            🌙 Dark
+        </button>
     </header>
 
     <div class="banner">
@@ -249,6 +281,31 @@
             
             // Update the screen with the filtered results
             displayArticles(filteredArticles);
+        });
+
+        // --- Dark Mode Logic ---
+        const themeToggleBtn = document.getElementById('themeToggle');
+        
+        // 1. Check if the user already chose a theme in a previous visit
+        const currentTheme = localStorage.getItem('theme');
+        if (currentTheme === 'dark') {
+            document.body.classList.add('dark-theme');
+            themeToggleBtn.innerText = '☀️ Light'; // Update button text
+        }
+
+        // 2. Listen for a click on the toggle button
+        themeToggleBtn.addEventListener('click', () => {
+            // Toggle the dark-theme class on and off the body
+            document.body.classList.toggle('dark-theme');
+            
+            // 3. Update the button text and save the choice to localStorage
+            if (document.body.classList.contains('dark-theme')) {
+                themeToggleBtn.innerText = '☀️ Light';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                themeToggleBtn.innerText = '🌙 Dark';
+                localStorage.setItem('theme', 'light');
+            }
         });
     </script>
 </body>
