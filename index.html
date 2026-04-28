@@ -161,6 +161,74 @@
             margin: 0;
             letter-spacing: 0.5px;
         }
+        /* --- Theme Toggle Switch Styling --- */
+        .theme-toggle-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .theme-icon {
+            font-size: 16px;
+        }
+
+        /* The switch container */
+        .theme-switch {
+            position: relative;
+            display: inline-block;
+            width: 48px;
+            height: 24px;
+        }
+
+        /* Hide the default HTML checkbox */
+        .theme-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        /* The sliding track */
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.4s;
+        }
+
+        /* The sliding circle (handle) */
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.4s;
+        }
+
+        /* Rounded styles */
+        .slider.round {
+            border-radius: 34px;
+        }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+
+        /* When the checkbox is checked, change background to blue */
+        input:checked + .slider {
+            background-color: var(--primary-blue);
+        }
+
+        /* When checked, slide the circle to the right */
+        input:checked + .slider:before {
+            transform: translateX(24px);
+        }
         /* Mobile Responsiveness */
         @media (max-width: 600px) {
             header {
@@ -197,9 +265,15 @@
         <div class="search-container">
             <input type="text" id="searchBar" placeholder="Search for an article...">
         </div>
-        <button id="themeToggle" style="padding: 10px 15px; cursor: pointer; border-radius: 20px; border: none; background-color: var(--primary-blue); color: white; font-weight: 600; transition: background-color 0.3s;">
-            🌙 Dark
-        </button>
+        
+        <div class="theme-toggle-container">
+            <span class="theme-icon">☀️</span>
+            <label class="theme-switch" for="themeToggle">
+                <input type="checkbox" id="themeToggle">
+                <span class="slider round"></span>
+            </label>
+            <span class="theme-icon">🌙</span>
+        </div>
     </header>
 
     <div class="banner">
@@ -283,27 +357,25 @@
             displayArticles(filteredArticles);
         });
 
-        // --- Dark Mode Logic ---
-        const themeToggleBtn = document.getElementById('themeToggle');
+        // --- Dark Mode Logic (Sliding Switch) ---
+        const themeToggleInput = document.getElementById('themeToggle');
         
         // 1. Check if the user already chose a theme in a previous visit
         const currentTheme = localStorage.getItem('theme');
         if (currentTheme === 'dark') {
             document.body.classList.add('dark-theme');
-            themeToggleBtn.innerText = '☀️ Light'; // Update button text
+            themeToggleInput.checked = true; // Visually slide the switch to the "on" position
         }
 
-        // 2. Listen for a click on the toggle button
-        themeToggleBtn.addEventListener('click', () => {
+        // 2. Listen for the toggle switch to change
+        themeToggleInput.addEventListener('change', () => {
             // Toggle the dark-theme class on and off the body
             document.body.classList.toggle('dark-theme');
             
-            // 3. Update the button text and save the choice to localStorage
+            // 3. Save the choice to localStorage without changing button text
             if (document.body.classList.contains('dark-theme')) {
-                themeToggleBtn.innerText = '☀️ Light';
                 localStorage.setItem('theme', 'dark');
             } else {
-                themeToggleBtn.innerText = '🌙 Dark';
                 localStorage.setItem('theme', 'light');
             }
         });
