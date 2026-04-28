@@ -41,6 +41,13 @@
             color: #ffffff;
             border-color: #333333;
         }
+        /* Ensure the blue focus outline works in dark mode */
+        body.dark-theme #searchBar:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 8px rgba(0, 168, 255, 0.3); /* Slightly more opaque shadow for dark mode */
+            outline: none;
+        }
+        
 
         /* General page styling */
         body {
